@@ -45,7 +45,7 @@ interface PlayerStore {
   updateFromSDKState: (sdkState: SpotifyPlaybackState) => void;
 }
 
-const initialState = {
+export const usePlayerStore = create<PlayerStore>()((set, get) => ({
   // Track state
   currentTrack: null,
   contextUri: null,
@@ -54,7 +54,7 @@ const initialState = {
   // Playback
   isPlaying: false,
   shuffleState: false,
-  repeatState: 'off' as RepeatState,
+  repeatState: 'off',
   progressMs: 0,
   durationMs: 0,
 
@@ -70,11 +70,8 @@ const initialState = {
 
   // UI state for player
   isFullscreenOpen: false,
-};
 
-export const usePlayerStore = create<PlayerStore>()((set, get) => ({
-  ...initialState,
-
+  // Actions
   setCurrentTrack: (track) => set({ currentTrack: track }),
 
   setIsPlaying: (playing) => set({ isPlaying: playing }),
@@ -120,7 +117,7 @@ export const usePlayerStore = create<PlayerStore>()((set, get) => ({
       progressMs: sdkState.progress_ms ?? 0,
       durationMs: sdkState.item?.duration_ms ?? 0,
       shuffleState: sdkState.shuffle_state,
-      repeatState: sdkState.repeat_state,
+      repeatState: sdkState.repeat_state as RepeatState,
       deviceId: sdkState.device?.id ?? null,
       volumePercent: sdkState.device?.volume_percent ?? get().volumePercent,
       contextUri: sdkState.context?.uri ?? null,

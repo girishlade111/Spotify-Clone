@@ -9,7 +9,7 @@ import { Tooltip } from "./Tooltip";
 
 interface IconButtonProps {
   icon: ReactNode;
-  onClick?: () => void;
+  onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
   tooltip?: string;
   size?: "sm" | "md" | "lg";
   active?: boolean;
