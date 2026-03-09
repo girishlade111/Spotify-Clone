@@ -17,9 +17,6 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "image-cdn-fa.spotifycdn.com" },
     ],
   },
-  experimental: {
-    typedRoutes: true,
-  },
   compiler: {
     removeConsole: process.env.NODE_ENV === "production",
   },

@@ -2,7 +2,7 @@
  * NextAuth Configuration
  */
 
-import NextAuth, { type NextAuthConfig } from "next-auth";
+import NextAuth from "next-auth";
 import Spotify from "next-auth/providers/spotify";
 import type { JWT } from "next-auth/jwt";
 
@@ -71,7 +71,7 @@ async function refreshAccessToken(token: {
   }
 }
 
-export const authOptions: NextAuthConfig = {
+export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
     Spotify({
       clientId: SPOTIFY_CLIENT_ID,
@@ -143,10 +143,9 @@ export const authOptions: NextAuthConfig = {
     maxAge: 30 * 24 * 60 * 60,
   },
   debug: process.env.NODE_ENV === "development",
-};
+});
 
 export async function getServerSession() {
-  const { auth } = await NextAuth(authOptions);
   return auth();
 }
 
@@ -154,5 +153,3 @@ export async function getAccessToken() {
   const session = await getServerSession();
   return session?.accessToken ?? null;
 }
-
-export default NextAuth(authOptions);
