@@ -11,8 +11,11 @@ import { TopBar } from "@/components/layout/TopBar/TopBar";
 import { NowPlayingBar } from "@/components/player/NowPlayingBar";
 import { FullscreenPlayer } from "@/components/player/FullscreenPlayer";
 import { useSpotifyPlayer } from "@/hooks/useSpotifyPlayer";
+import { useKeyboardShortcuts } from "@/hooks/useKeyboardShortcuts";
+import { ScrollToTop } from "@/components/ui/ScrollToTop";
 import { useUIStore } from "@/store/uiStore";
 import { QueuePanel } from "@/components/queue/QueuePanel";
+import { ErrorBoundary } from "@/components/ui/ErrorBoundary";
 import { cn } from "@/lib/utils";
 
 interface MainLayoutProps {
@@ -27,8 +30,22 @@ export default function MainLayout({ children }: MainLayoutProps) {
   // Initialize Spotify player (only called once in root layout)
   useSpotifyPlayer();
 
+  // Initialize keyboard shortcuts (only called once in root layout)
+  useKeyboardShortcuts();
+
   return (
     <>
+      {/* Scroll to top on navigation */}
+      <ScrollToTop scrollRef={scrollRef} />
+
+      {/* Skip to content link for accessibility */}
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[9999] focus:px-4 focus:py-2 focus:bg-white focus:text-black focus:rounded focus:font-medium"
+      >
+        Skip to content
+      </a>
+
       <div className="h-screen w-screen flex flex-col bg-black overflow-hidden">
         {/* Main Area - 3 Panel Grid */}
         <div className="flex-1 flex overflow-hidden">
@@ -47,10 +64,15 @@ export default function MainLayout({ children }: MainLayoutProps) {
 
             {/* Scrollable Content Area */}
             <main
+              id="main-content"
               ref={scrollRef}
               className="flex-1 overflow-y-auto"
+              role="main"
+              aria-label="Main content"
             >
-              {children}
+              <ErrorBoundary>
+                {children}
+              </ErrorBoundary>
             </main>
           </div>
 

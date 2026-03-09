@@ -1,0 +1,67 @@
+/**
+ * Error Boundary Component
+ * Catches render errors in child components
+ */
+
+"use client";
+
+import { Component, ErrorInfo, ReactNode } from "react";
+
+interface Props {
+  children: ReactNode;
+  fallback?: ReactNode;
+}
+
+interface State {
+  hasError: boolean;
+  error: Error | null;
+}
+
+export class ErrorBoundary extends Component<Props, State> {
+  public state: State = {
+    hasError: false,
+    error: null,
+  };
+
+  public static getDerivedStateFromError(error: Error): State {
+    return { hasError: true, error };
+  }
+
+  public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+    console.error("ErrorBoundary caught an error:", error, errorInfo);
+  }
+
+  public render() {
+    if (this.state.hasError) {
+      if (this.props.fallback) {
+        return this.props.fallback;
+      }
+
+      return (
+        <div className="min-h-screen flex items-center justify-center bg-black p-6">
+          <div className="max-w-md text-center">
+            {/* Spotify Logo */}
+            <svg viewBox="0 0 1134 340" className="h-12 w-auto mx-auto mb-8" fill="white">
+              <path d="M8 171c0 92 76 168 168 168s168-76 168-168S268 4 176 4 8 79 8 171zm230 78c-39-24-89-30-147-17-14 2-16-18-4-20 64-15 118-8 162 19 11 7 0 24-11 18zm17-45c-45-28-114-36-167-20-17 5-23-21-7-25 61-18 136-9 187 23 14 9 1 31-13 22zm12-47c-52-31-137-41-186-23-18 6-25-23-8-28 57-17 149-7 207 29 16 10 3 33-13 22zM825 117c-26 0-44 10-57 23v-19h-24v116h26v-65c0-26 15-41 39-41 23 0 35 15 35 41v65h26v-73c0-35-17-47-45-47zm-129-2c-30 0-49 14-61 32V41h-26v196h26v-19c12 17 30 31 61 31 46 0 77-37 77-87s-31-87-77-87zm-9 152c-32 0-53-27-53-65s21-65 53-65 53 27 53 65-21 65-53 65zm-169-30c12 8 28 12 47 12 28 0 45-14 45-37 0-21-15-31-42-37l-28-6c-19-4-27-12-27-25 0-16 13-26 35-26 18 0 33 6 43 16l13-18c-13-11-32-17-56-17-31 0-50 16-50 40 0 21 14 32 41 38l29 6c20 5 28 13 28 27 0 18-14 28-38 28-20 0-38-7-50-18l-10 17zm-93-116c-17 0-31 6-41 15v-13h-24v114h26v-19c10 9 23 15 39 15 33 0 57-27 57-66s-24-66-57-66zm-9 110c-23 0-39-18-39-44s16-44 39-44 39 18 39 44-16 44-39 44zM293 237h26V103h-26v134zm13-175c-9 0-16 7-16 16s7 16 16 16 16-7 16-16-7-16-16-16zm628 111c0-35-23-56-58-56-23 0-41 9-52 24V41h-26v196h26v-19c11 15 29 24 52 24 35 0 58-21 58-56zm-26 0c0 26-15 44-41 44-26 0-43-18-43-44s17-44 43-44c26 0 41 18 41 44zm-422 64h26v-65c0-26 15-41 39-41 23 0 35 15 35 41v65h26v-73c0-35-17-47-45-47-26 0-44 10-57 23v-19h-24v116zm209-120c-30 0-49 14-61 32V41h-26v196h26v-19c12 17 30 31 61 31 46 0 77-37 77-87s-31-87-77-87zm-9 152c-32 0-53-27-53-65s21-65 53-65 53 27 53 65-21 65-53 65z" />
+            </svg>
+
+            <h1 className="text-2xl font-bold text-white mb-4">Something went wrong</h1>
+            <p className="text-[#A7A7A7] mb-8">
+              Try refreshing the page or come back later.
+            </p>
+
+            <button
+              type="button"
+              onClick={() => window.location.reload()}
+              className="bg-[#1DB954] text-black font-bold py-3 px-8 rounded-full hover:bg-[#1ED760] hover:scale-[1.04] transition-all"
+            >
+              Retry
+            </button>
+          </div>
+        </div>
+      );
+    }
+
+    return this.props.children;
+  }
+}

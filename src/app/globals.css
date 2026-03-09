@@ -253,10 +253,145 @@ a:hover {
 *:focus-visible {
   outline: 2px solid var(--white);
   outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* Skip to content link for accessibility */
+.skip-to-content {
+  position: absolute;
+  left: -9999px;
+  z-index: 999;
+  padding: 1rem 2rem;
+  background: var(--green);
+  color: var(--black);
+  font-weight: bold;
+  border-radius: 4px;
+}
+
+.skip-to-content:focus {
+  left: 1rem;
+  top: 1rem;
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .text-subdued {
+    color: var(--white);
+  }
+  
+  button,
+  a {
+    border: 1px solid currentColor;
+  }
 }
 
 /* Selection color */
 ::selection {
   background: var(--green);
   color: var(--white);
+}
+
+/* Mobile guard - show message on small screens */
+@media (max-width: 768px) {
+  .mobile-guard-overlay {
+    display: flex;
+  }
+}
+
+.mobile-guard-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: #121212;
+  z-index: 99999;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  text-align: center;
+}
+
+/* Toast animations */
+@keyframes toast-enter {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes toast-exit {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+}
+
+.animate-enter {
+  animation: toast-enter 0.3s ease forwards;
+}
+
+.animate-leave {
+  animation: toast-exit 0.3s ease forwards;
+}
+
+/* Loading shimmer effect */
+.shimmer {
+  background: linear-gradient(
+    90deg,
+    #282828 0%,
+    #3e3e3e 50%,
+    #282828 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+/* Playing animation bars */
+.playing-animation {
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  height: 16px;
+}
+
+.playing-animation span {
+  width: 4px;
+  background: #1db954;
+  border-radius: 2px;
+  animation: playingBar1 1s ease-in-out infinite;
+}
+
+.playing-animation span:nth-child(2) {
+  animation: playingBar2 1s ease-in-out infinite;
+  animation-delay: 0.2s;
+}
+
+.playing-animation span:nth-child(3) {
+  animation: playingBar3 1s ease-in-out infinite;
+  animation-delay: 0.4s;
+}
+
+/* Pause animation when not playing */
+.paused .playing-animation span {
+  animation-play-state: paused;
 }
