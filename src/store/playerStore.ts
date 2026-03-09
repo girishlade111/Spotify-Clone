@@ -54,7 +54,7 @@ const initialState = {
   // Playback
   isPlaying: false,
   shuffleState: false,
-  repeatState: 'off',
+  repeatState: 'off' as RepeatState,
   progressMs: 0,
   durationMs: 0,
 
