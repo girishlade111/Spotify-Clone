@@ -178,6 +178,117 @@ export interface SpotifyPagingObject<T> {
   href: string;
 }
 
+export interface SpotifyPlaylistTrack {
+  added_at: string;
+  added_by: SpotifyPlaylistOwner;
+  track: SpotifyTrack | null;
+  is_local: boolean;
+}
+
+export interface SpotifySearchResults {
+  tracks: SpotifyPagingObject<SpotifyTrack>;
+  albums: SpotifyPagingObject<SpotifySimplifiedAlbum>;
+  artists: SpotifyPagingObject<SpotifyArtist>;
+  playlists: SpotifyPagingObject<SpotifyPlaylist>;
+  shows: SpotifyPagingObject<SpotifyShow>;
+  episodes: SpotifyPagingObject<SpotifyEpisode>;
+}
+
+export interface SpotifyRecentlyPlayedContext {
+  type: string;
+  href: string;
+  external_urls: SpotifyExternalUrls;
+  uri: string;
+}
+
+export interface SpotifyRecentlyPlayedItem {
+  track: SpotifyTrack;
+  played_at: string;
+  context: SpotifyRecentlyPlayedContext | null;
+}
+
+export interface SpotifyRecentlyPlayed {
+  items: SpotifyRecentlyPlayedItem[];
+  next: string | null;
+  cursors: {
+    after: string;
+    before: string;
+  };
+  limit: number;
+  href: string;
+}
+
+export interface SpotifyRecommendationSeed {
+  afterFilteringSize: number;
+  afterRelinkingSize: number;
+  href: string | null;
+  id: string;
+  initialPoolSize: number;
+  type: "artist" | "track" | "genre";
+}
+
+export interface SpotifyRecommendations {
+  tracks: SpotifyTrack[];
+  seeds: SpotifyRecommendationSeed[];
+}
+
+export interface SpotifyShow {
+  id: string;
+  name: string;
+  description: string | null;
+  publisher: string;
+  images: SpotifyImage[];
+  total_episodes: number;
+  uri: string;
+  type: "show";
+  external_urls: SpotifyExternalUrls;
+  available_markets: string[];
+  copyrights: SpotifyCopyright[];
+  explicit: boolean;
+  episodes?: SpotifyPagingObject<SpotifyEpisode>;
+  html_description: string;
+  is_externally_hosted: boolean;
+  languages: string[];
+  media_type: string;
+}
+
+export interface SpotifyEpisode {
+  id: string;
+  name: string;
+  description: string | null;
+  duration_ms: number;
+  images: SpotifyImage[];
+  release_date: string;
+  release_date_precision: "year" | "month" | "day";
+  uri: string;
+  type: "episode";
+  show: SpotifyShow;
+  audio_preview_url: string | null;
+  external_urls: SpotifyExternalUrls;
+  html_description: string;
+  is_externally_hosted: boolean;
+  is_playable: boolean;
+  language: string;
+  languages: string[];
+  resume_point?: {
+    fully_played: boolean;
+    resume_position_ms: number;
+  };
+  explicit: boolean;
+}
+
+export interface SpotifyCategory {
+  id: string;
+  name: string;
+  icons: SpotifyImage[];
+  href: string;
+}
+
+export interface SpotifyQueue {
+  currently_playing: SpotifyTrack | null;
+  queue: SpotifyTrack[];
+}
+
 export type SimplifiedTrack = SpotifySimplifiedTrack;
 export type SimplifiedAlbum = SpotifySimplifiedAlbum;
 export type SimplifiedArtist = SpotifySimplifiedArtist;
