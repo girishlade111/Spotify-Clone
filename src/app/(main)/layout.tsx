@@ -6,6 +6,8 @@
 "use client";
 
 import { useRef } from "react";
+import { useSession } from "next-auth/react";
+import { useRouter, usePathname } from "next/navigation";
 import { Sidebar } from "@/components/layout/Sidebar/Sidebar";
 import { TopBar } from "@/components/layout/TopBar/TopBar";
 import { NowPlayingBar } from "@/components/player/NowPlayingBar";
@@ -16,16 +18,41 @@ import { ScrollToTop } from "@/components/ui/ScrollToTop";
 import { useUIStore } from "@/store/uiStore";
 import { QueuePanel } from "@/components/queue/QueuePanel";
 import { ErrorBoundary } from "@/components/ui/ErrorBoundary";
-import { cn } from "@/lib/utils";
+import { SpotifyLogo } from "@/components/ui/SpotifyLogo";
 
 interface MainLayoutProps {
   children: React.ReactNode;
 }
 
 export default function MainLayout({ children }: MainLayoutProps) {
+  const { data: session, status } = useSession();
+  const router = useRouter();
+  const pathname = usePathname();
   const scrollRef = useRef<HTMLDivElement>(null);
   const rightPanel = useUIStore((state) => state.rightPanel);
   const sidebarWidth = useUIStore((state) => state.sidebarWidth);
+
+  // Redirect to login if not authenticated
+  if (status === "unauthenticated") {
+    router.push("/login");
+    return null;
+  }
+
+  // Show loading state while checking auth
+  if (status === "loading") {
+    return (
+      <div className="min-h-screen w-full bg-[#121212] flex items-center justify-center">
+        <div className="flex flex-col items-center gap-4">
+          <SpotifyLogo className="w-[200px] h-[60px]" />
+          <div className="flex gap-1">
+            <div className="w-2 h-2 bg-[#1DB954] rounded-full animate-bounce" style={{ animationDelay: "0s" }} />
+            <div className="w-2 h-2 bg-[#1DB954] rounded-full animate-bounce" style={{ animationDelay: "0.2s" }} />
+            <div className="w-2 h-2 bg-[#1DB954] rounded-full animate-bounce" style={{ animationDelay: "0.4s" }} />
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   // Initialize Spotify player (only called once in root layout)
   useSpotifyPlayer();

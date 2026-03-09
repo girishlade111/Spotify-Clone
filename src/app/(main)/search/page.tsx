@@ -1,24 +1,56 @@
 /**
- * Search Page
+ * Search Page - Default view with genre browsing
  */
 
+"use client";
+
+import { useRouter } from "next/navigation";
+import { GenreCard } from "@/components/search/GenreCard";
+import { GENRE_COLORS } from "@/lib/constants";
+
+const GENRES = [
+  { id: "pop", name: "Pop" },
+  { id: "hip-hop", name: "Hip-Hop" },
+  { id: "dance-electronic", name: "Dance/Electronic" },
+  { id: "rnb", name: "R&B" },
+  { id: "indie", name: "Indie" },
+  { id: "rock", name: "Rock" },
+  { id: "latin", name: "Latin" },
+  { id: "podcasts", name: "Podcasts" },
+  { id: "mood", name: "Mood" },
+  { id: "country", name: "Country" },
+  { id: "jazz", name: "Jazz" },
+  { id: "classical", name: "Classical" },
+  { id: "k-pop", name: "K-Pop" },
+  { id: "chill", name: "Chill" },
+  { id: "gaming", name: "Gaming" },
+  { id: "soul", name: "Soul" },
+  { id: "metal", name: "Metal" },
+  { id: "alternative", name: "Alternative" },
+  { id: "focus", name: "Focus" },
+  { id: "wellness", name: "Wellness" },
+];
+
 export default function SearchPage() {
+  const router = useRouter();
+
+  const handleGenreClick = (genreId: string) => {
+    router.push(`/search/${genreId}`);
+  };
+
   return (
     <div className="p-6">
-      <h1 className="text-3xl font-bold text-white mb-6">Browse all</h1>
-      
-      {/* Genre cards placeholder */}
+      <h1 className="text-[24px] font-bold text-white mb-6">Browse all</h1>
+
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
-        {["Pop", "Hip-Hop", "Rock", "Latin", "Mood", "Indie", "Workout", "Country", "R&B", "Electronic"].map((genre) => (
-          <div
-            key={genre}
-            className="aspect-square rounded-[8px] p-4 relative overflow-hidden cursor-pointer hover:scale-[1.02] transition-transform"
-            style={{
-              backgroundColor: `hsl(${Math.random() * 360}, 70%, 50%)`,
-            }}
-          >
-            <span className="text-2xl font-bold text-white">{genre}</span>
-          </div>
+        {GENRES.map((genre) => (
+          <GenreCard
+            key={genre.id}
+            id={genre.id}
+            name={genre.name}
+            color={GENRE_COLORS[genre.id as keyof typeof GENRE_COLORS] || "#8B5CF6"}
+            onClick={() => handleGenreClick(genre.id)}
+          />
         ))}
       </div>
     </div>
