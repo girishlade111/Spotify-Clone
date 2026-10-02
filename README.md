@@ -423,3 +423,7 @@ This project is for educational purposes only. Spotify and its logo are trademar
 ---
 
 **Made with ❤️ and lots of ☕**
+
+---
+
+**Built by Girish Lade** — https://ladestack.in
